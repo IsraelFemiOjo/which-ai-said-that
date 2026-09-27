@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Round Editor | Which AI Said That?</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  body{background:#fff}
+  .nav .meta{font-size:13px;color:var(--muted)}
+  .wrap{width:100%;max-width:560px;margin:0 auto;padding:0 20px 40px}
+  .wrap .nav{padding:0}
+  .bar .pill,.row .pill{text-align:center}
+  .ed h1{font-size:40px;line-height:1.05;margin:18px 0 8px}
+  .ed .sub{color:var(--muted);margin-bottom:20px}
+  .rules{background:var(--band);border-radius:var(--r-card);padding:16px 18px;font-size:14px;margin-bottom:22px}
+  .rules b{font-weight:600}
+  .rules li{margin:4px 0 0 18px}
+  label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+  input,select,textarea{
+    width:100%;font:inherit;font-size:16px;color:var(--ink);
+    background:#fff;border:1px solid rgba(0,0,0,.14);border-radius:12px;padding:11px 12px;
+  }
+  textarea{min-height:150px;resize:vertical;line-height:1.5}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .q{border-top:1px solid var(--line);padding-top:18px;margin-top:22px}
+  .q h2{font-size:18px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+  .q h2 button{font-size:13px;color:var(--muted);text-decoration:underline;font-weight:400}
+  .warn{font-size:13px;color:#8a3a22;margin-top:6px}
+  .bar{position:sticky;bottom:0;background:rgba(242,242,242,.94);margin-left:-20px;margin-right:-20px;padding-left:20px!important;padding-right:20px!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+       padding:10px 0 12px;margin-top:24px;border-top:1px solid var(--line);display:grid;gap:6px}
+  .status:empty{display:none}
+  .bar .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .status{font-size:13px;color:var(--muted);text-align:center;min-height:18px}
+  .problems{font-size:14px;color:#8a3a22;margin-top:10px}
+  .problems li{margin-left:18px}
+</style>
+</head>
+<body>
+<div class="wrap ed">
+  <nav class="nav">
+    <a class="logo" href="./" aria-label="Game"><img src="assets/ifo-logo.svg" alt="IFO"></a>
+    <span class="meta">Round editor</span>
+  </nav>
+
+  <h1 class="serif">Make a round</h1>
+  <p class="sub">Paste the answers exactly as each AI gave them. Download the file, then upload it to the <b>rounds</b> folder on GitHub.</p>
+
+  <div class="rules">
+    <b>Keep it fair, every time</b>
+    <ul>
+      <li>New chat for every prompt. Memory and custom instructions off.</li>
+      <li>Use each app's copy button so formatting comes across as is.</li>
+      <li>Never edit an answer. Not even a typo.</li>
+      <li>Write down the exact model or access tier shown in the app. It goes in your private record only. Players just see ChatGPT, Claude, Gemini or Grok.</li>
+      <li>Short prompts work best. Ask for under 80 words so answers fit a phone screen.</li>
+    </ul>
+  </div>
+
+  <label for="fDate">Round date</label>
+  <input type="date" id="fDate">
+  <label for="fTheme">Theme (optional)</label>
+  <input type="text" id="fTheme" placeholder="Mixed bag">
+
+  <div id="qs"></div>
+  <button class="pill glass block" id="btnAdd" style="margin-top:18px">Add a question</button>
+
+  <ul class="problems" id="problems"></ul>
+
+  <div class="bar">
+    <div class="row">
+      <button class="pill glass" id="btnPreview">Preview round</button>
+      <button class="pill glass" id="btnDownload">Download file</button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+  <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px">
+    <button class="pill glass" id="btnPrivate" style="grid-column:1/-1">Save private record</button>
+    <button class="pill glass" id="btnLoad">Open a file</button>
+    <button class="pill glass" id="btnClear">Start fresh</button>
+  </div>
+  <input type="file" id="fileIn" accept=".json,application/json" hidden>
+</div>
+
+<script>
+const MODELS = ["ChatGPT", "Claude", "Gemini", "Grok"];
+const DRAFT_KEY = "wast-editor-draft";
+const $ = id => document.getElementById(id);
+const safe = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+function pad(n){ return String(n).padStart(2,"0"); }
+function tomorrow(){ const d=new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function escAttr(s){ return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+
+function blankQ(){ return { prompt:"", model:"", version:"", answer:"", note:"" }; }
+
+function qHTML(q, i){
+  return `
+  <div class="q" data-i="${i}">
+    <h2>Question ${i+1} <button type="button" data-remove="${i}">Remove</button></h2>
+    <label>Prompt you gave the AI</label>
+    <input type="text" data-f="prompt" value="${escAttr(q.prompt)}" placeholder="Is a hot dog a sandwich? Answer in under 60 words.">
+    <div class="two">
+      <div>
+        <label>Which AI wrote it</label>
+        <select data-f="model">
+          <option value="">Choose</option>
+          ${MODELS.map(m=>`<option ${q.model===m?"selected":""}>${m}</option>`).join("")}
+        </select>
+      </div>
+      <div>
+        <label>Exact model or tier (private)</label>
+        <input type="text" data-f="version" value="${escAttr(q.version)}" placeholder="e.g. Claude Opus 5.5">
+      </div>
+    </div>
+    <label>Answer, pasted exactly</label>
+    <textarea data-f="answer" placeholder="Paste the full answer here">${escAttr(q.answer)}</textarea>
+    <div class="warn" data-warn></div>
+    <label>Reveal note (optional)</label>
+    <input type="text" data-f="note" value="${escAttr(q.note)}" placeholder="e.g. Notice the question at the end.">
+  </div>`;
+}
+
+let data = safe.get(DRAFT_KEY) || { date: tomorrow(), theme:"", questions:[blankQ(),blankQ(),blankQ(),blankQ(),blankQ()] };
+if (!data.date || data.date < tomorrow()) data.date = tomorrow(); // always start on today
+
+function render(){
+  $("fDate").value = data.date || "";
+  $("fTheme").value = data.theme || "";
+  $("qs").innerHTML = data.questions.map(qHTML).join("");
+  checkAll();
+}
+
+function readForm(){
+  data.date = $("fDate").value;
+  data.theme = $("fTheme").value.trim();
+  data.questions = [...document.querySelectorAll(".q")].map(el => {
+    const q = {};
+    el.querySelectorAll("[data-f]").forEach(f => q[f.dataset.f] = f.dataset.f === "answer" ? f.value : f.value.trim());
+    return q;
+  });
+  safe.set(DRAFT_KEY, data);
+}
+
+function checkAll(){
+  document.querySelectorAll(".q").forEach(el => {
+    const a = el.querySelector('[data-f="answer"]').value;
+    const w = el.querySelector("[data-warn]");
+    w.textContent = a.length > 900 ? "This answer is long (" + a.length + " characters). It will scroll on phones. A shorter prompt helps." : "";
+  });
+}
+
+function problems(){
+  const p = [];
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data.date)) p.push("Pick a round date.");
+  if (!data.questions.length) p.push("Add at least one question.");
+  data.questions.forEach((q,i) => {
+    const n = "Question " + (i+1) + ": ";
+    if (!q.prompt) p.push(n + "prompt is empty.");
+    if (!q.model) p.push(n + "choose which AI wrote it.");
+    if (!q.answer || !q.answer.trim()) p.push(n + "answer is empty.");
+    if (!q.version) p.push(n + "add the exact model or access tier for your private record.");
+  });
+  const used = new Set(data.questions.map(q=>q.model).filter(Boolean));
+  if (data.questions.length >= 4 && used.size === 1) p.push("Every answer is from the same AI. Mixing them keeps it fun.");
+  return p;
+}
+
+function showProblems(list){
+  $("problems").innerHTML = list.map(x => "<li>"+x.replace(/</g,"&lt;")+"</li>").join("");
+}
+
+function buildFile(){
+  return {
+    date: data.date,
+    theme: data.theme || undefined,
+    questions: data.questions.map(q => {
+      const o = { prompt: q.prompt, model: q.model, answer: q.answer };
+      if (q.note) o.note = q.note;
+      return o;
+    })
+  };
+}
+
+function say(t){ $("status").textContent = t; clearTimeout(say.t); say.t = setTimeout(()=>$("status").textContent="", 3500); }
+
+$("qs").addEventListener("input", () => { readForm(); checkAll(); });
+$("qs").addEventListener("change", readForm);
+$("fDate").addEventListener("change", readForm);
+$("fTheme").addEventListener("input", readForm);
+$("qs").addEventListener("click", e => {
+  const i = e.target.dataset.remove;
+  if (i === undefined) return;
+  readForm(); data.questions.splice(Number(i),1); safe.set(DRAFT_KEY, data); render();
+});
+$("btnAdd").onclick = () => { readForm(); data.questions.push(blankQ()); safe.set(DRAFT_KEY, data); render(); };
+
+$("btnPreview").onclick = () => {
+  readForm();
+  const p = problems().filter(x => !x.startsWith("Every answer"));
+  showProblems(p);
+  if (p.length) { say("Fix the items above first."); return; }
+  safe.set("wast-preview", buildFile());
+  window.open("./?preview=1", "_blank");
+};
+
+$("btnDownload").onclick = () => {
+  readForm();
+  const p = problems();
+  showProblems(p);
+  if (p.some(x => !x.startsWith("Every answer"))) { say("Fix the items above first."); return; }
+  const blob = new Blob([JSON.stringify(buildFile(), null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = data.date + ".json";
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+  say("Downloaded " + data.date + ".json. Upload it to the rounds folder.");
+};
+
+$("btnPrivate").onclick = () => {
+  readForm();
+  const p = problems();
+  showProblems(p);
+  if (p.some(x => !x.startsWith("Every answer"))) { say("Fix the items above first."); return; }
+  const rec = { date: data.date, theme: data.theme || undefined, note: "Private record. Keep this file. Do not upload it to GitHub.",
+    questions: data.questions.map(q => ({ prompt: q.prompt, model: q.model, exactModelOrTier: q.version, answer: q.answer, note: q.note || undefined })) };
+  const blob = new Blob([JSON.stringify(rec, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = data.date + "-private.json"; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+  say("Saved " + data.date + "-private.json. Keep it. Don't upload it.");
+};
+$("btnLoad").onclick = () => $("fileIn").click();
+$("fileIn").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const j = JSON.parse(await f.text());
+    data = { date: j.date || f.name.replace(/\.json$/,""), theme: j.theme || "", questions: (j.questions||[]).map(q => Object.assign(blankQ(), q, q.exactModelOrTier ? { version: q.exactModelOrTier } : {})) };
+    safe.set(DRAFT_KEY, data); render(); say("Opened " + f.name);
+  } catch(err){ say("That file couldn't be read."); }
+  e.target.value = "";
+};
+$("btnClear").onclick = () => {
+  if (!confirm("Clear this draft and start a new round?")) return;
+  data = { date: tomorrow(), theme:"", questions:[blankQ(),blankQ(),blankQ(),blankQ(),blankQ()] };
+  safe.set(DRAFT_KEY, data); showProblems([]); render();
+};
+
+render();
+</script>
+</body>
+</html>

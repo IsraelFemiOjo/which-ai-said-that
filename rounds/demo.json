@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-28",
+  "number": 0,
+  "theme": "Everyday questions",
+  "questions": [
+    {
+      "prompt": "Is a hot dog a sandwich? Answer in under 60 words.",
+      "answer": "Technically, maybe. A sandwich is usually filling between bread, and a hot dog fits that loosely. But most people, and the National Hot Dog and Sausage Council, treat it as its own thing. So: **by definition, arguable; by culture, no.**",
+      "model": "Claude"
+    },
+    {
+      "prompt": "Give me one tip to stop procrastinating.",
+      "answer": "Here's one that works surprisingly well:\n\n**The 2 minute start.** Tell yourself you'll work on the task for just two minutes.\n\n- Starting is the hardest part\n- Momentum usually carries you past the two minutes\n- Even if it doesn't, you've made progress\n\nWant a few more strategies tailored to your situation? 😊",
+      "model": "ChatGPT"
+    },
+    {
+      "prompt": "Roast my plan to wake up at 5am every day.",
+      "answer": "Ah yes, the 5am club. You'll join on Monday, hit snooze on Tuesday, and by Thursday you'll be telling people you're \"more of a night person anyway.\" Bold plan though. Respect.",
+      "model": "Grok"
+    },
+    {
+      "prompt": "Explain why the sky is blue in two sentences.",
+      "answer": "Sunlight scatters off molecules in the air, and shorter blue wavelengths scatter much more than red ones, a process called Rayleigh scattering. That scattered blue light reaches your eyes from every direction, so the whole sky looks blue.",
+      "model": "Gemini"
+    },
+    {
+      "prompt": "Write a one line tagline for a small bakery in Lagos.",
+      "answer": "Fresh from our oven to your hustle.",
+      "model": "Claude"
+    }
+  ]
+}

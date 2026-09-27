@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-27",
+  "theme": "No filter",
+  "questions": [
+    {
+      "prompt": "Write a breakup text to a situationship. Under 30 words.",
+      "model": "Claude",
+      "answer": "Hey, I've really enjoyed our time together, but I'm not feeling this the way I'd need to. I'd rather be honest now than drift. Wishing you the best."
+    },
+    {
+      "prompt": "iPhone or Android? Pick one. No fence sitting. Under 25 words.",
+      "model": "ChatGPT",
+      "answer": "iPhone. Better app quality, longer software support, stronger ecosystem, and more consistent performance."
+    },
+    {
+      "prompt": "Write the most savage reply to someone who texts \"k\". Under 20 words.",
+      "model": "Grok",
+      "answer": "“Save the other 25 letters. You’ll need them when you want something.”"
+    },
+    {
+      "prompt": "Write a tweet that would get ratioed instantly. Under 30 words.",
+      "model": "Gemini",
+      "answer": "Season 8 was the only good season of Game of Thrones. The rest of the show was just boring filler for people who need everything spoon-fed to them."
+    },
+    {
+      "prompt": "Roast people who say \"let's circle back\". Under 30 words.",
+      "model": "ChatGPT",
+      "answer": "“Let’s circle back” — corporate speak for “I have no answer, but I own a calendar.”"
+    }
+  ]
+}

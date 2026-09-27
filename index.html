@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Which AI Said That? | Israel Femi-Ojo</title>
+<meta name="description" content="A daily guessing game. Think you can tell which AI wrote each answer?">
+<link rel="canonical" href="https://israelfemiojo.github.io/which-ai-said-that/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Which AI Said That?">
+<meta property="og:title" content="Which AI Said That?">
+<meta property="og:description" content="Think you can tell which AI wrote each answer? New round every day.">
+<meta property="og:url" content="https://israelfemiojo.github.io/which-ai-said-that/">
+<meta property="og:image" content="https://israelfemiojo.github.io/which-ai-said-that/assets/og-image.jpg">
+<meta property="og:image:secure_url" content="https://israelfemiojo.github.io/which-ai-said-that/assets/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Which AI Said That? A daily game by Israel Femi-Ojo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Which AI Said That?">
+<meta name="twitter:description" content="Think you can tell which AI wrote each answer? New round every day.">
+<meta name="twitter:image" content="https://israelfemiojo.github.io/which-ai-said-that/assets/og-image.jpg">
+<meta name="twitter:image:alt" content="Which AI Said That? A daily game by Israel Femi-Ojo">
+<meta name="twitter:creator" content="@israelfemiojo">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav in">
+  <a class="logo" href="https://israelfemiojo.github.io/israel-femi-ojo-portfolio/" aria-label="Israel Femi-Ojo portfolio"><img src="assets/ifo-logo.svg" alt="IFO"></a>
+  <a class="icon glass" href="https://x.com/israelfemiojo" aria-label="Israel on X">X</a>
+</nav>
+
+<!-- loading -->
+<section class="screen on" id="sLoading">
+  <div class="top"><div class="in"><p class="muted">Loading today's round…</p></div></div>
+  <div class="band"></div>
+</section>
+
+<!-- no round -->
+<section class="screen" id="sEmpty">
+  <div class="top"><div class="in">
+    <h1>No round yet.</h1>
+    <p class="lead">Today's answers aren't up. Check back later.</p>
+  </div></div>
+  <div class="band"></div>
+</section>
+
+<!-- start -->
+<section class="screen" id="sStart">
+  <div class="top"><div class="in">
+    <div class="kicker" id="startKicker">Daily game</div>
+    <h1 class="big">Which AI<br>Said That?</h1>
+    <p class="lead" id="startLead">Think you can tell which AI wrote each answer?</p>
+    <div class="facts">
+      <div><span>Round</span><b id="startNum">#1</b></div>
+      <div><span>Theme</span><b id="startTheme">Mixed bag</b></div>
+    </div>
+  </div></div>
+  <div class="band"><div class="in">
+    <div class="notice" id="demoNotice" hidden>This demo uses placeholder answers.</div>
+    <button class="pill glass" id="btnPlay">Play this round</button>
+    <ol class="how">
+      <li>Read the answer.</li>
+      <li>Guess which AI said it.</li>
+      <li>Share your score.</li>
+    </ol>
+    <p class="how-note">A model can appear more than once. New round every day.</p>
+    <button class="linkbtn" id="btnPrev" hidden>See yesterday's answers</button>
+  </div></div>
+</section>
+
+<!-- question -->
+<section class="screen" id="sQuestion">
+  <div class="top"><div class="in">
+    <div class="progress" id="progress"></div>
+    <div class="qhead"><span id="qCount">1 of 5</span><span id="qScore">0 correct</span></div>
+    <p class="prompt">Question: <b id="qPrompt"></b></p>
+    <div class="answer" id="qAnswer"></div>
+  </div></div>
+  <div class="band"><div class="in">
+    <div class="ask">Who wrote this?</div>
+    <div class="options" id="qOptions"></div>
+    <div class="reveal" id="qReveal">
+      <div class="verdict" id="qVerdict"></div>
+      <div class="detail" id="qDetail"></div>
+      <button class="pill glass" id="btnNext">Next question</button>
+    </div>
+  </div></div>
+</section>
+
+<!-- result -->
+<section class="screen" id="sResult">
+  <div class="top"><div class="in">
+    <div class="kicker" id="rKicker">Round #1</div>
+    <div class="score" id="rScore">0<small>/5</small></div>
+    <h2 class="title" id="rTitle"></h2>
+    <p class="lead" id="rLine"></p>
+    <div class="dots" id="rDots"></div>
+  </div></div>
+  <div class="band"><div class="in">
+    <div class="stats">
+      <div class="glass"><b id="rStreak">0</b><span>Day streak</span></div>
+      <div class="glass"><b id="rPlayed">0</b><span>Rounds played</span></div>
+      <div class="glass"><b id="rAvg">0</b><span>Average score</span></div>
+    </div>
+    <img class="card-preview" id="rCard" alt="Your result card">
+    <div class="actions">
+      <button class="pill glass" id="btnShareX">Post to X</button>
+      <button class="pill glass" id="btnShareImg">Share image</button>
+      <button class="pill glass" id="btnSave">Save image</button>
+      <button class="pill glass" id="btnCopy">Copy result</button>
+    </div>
+    <p class="next" id="rNext"></p>
+    <div class="recap">
+      <h3 id="rRecapTitle">Today's answers</h3>
+      <p class="recap-note" id="rRecapNote" hidden>The full answers unlock tomorrow when the next round goes up.</p>
+      <ul id="rRecap"></ul>
+      <button class="linkbtn" id="btnPrev2" hidden>See yesterday's answers</button>
+    </div>
+  </div></div>
+</section>
+
+<!-- yesterday's answers -->
+<section class="screen" id="sPrev">
+  <div class="top"><div class="in">
+    <div class="kicker" id="pvKicker"></div>
+    <h1 class="big">Yesterday's<br>answers</h1>
+    <p class="lead" id="pvTheme"></p>
+  </div></div>
+  <div class="band"><div class="in">
+    <ol class="pv" id="pvList"></ol>
+    <button class="pill glass" id="btnBack">Back</button>
+  </div></div>
+</section>
+
+<footer class="foot">
+  <p>A game by Israel Femi-Ojo.</p>
+  <p class="small">Answers are shown exactly as generated on the date of each round. Model access varies by platform. This game is independent and is not affiliated with OpenAI, Anthropic, Google or xAI.</p>
+</footer>
+
+<script src="game.js"></script>
+</body>
+</html>

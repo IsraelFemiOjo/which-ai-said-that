@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">IFO Ink and Signal logo with measured lens reflection</title>
+  <desc id="desc">The IFO editorial lens identity in ink, warm cream and signal orange. The O has a circular bowl, a measured curved reflection and a handle that extends cleanly beyond the frame.</desc>
+
+  <!-- Warm paper replaces sterile digital white. -->
+
+
+  <!-- Editorial frame. -->
+  <path d="M340 190 H1330 Q1400 190 1400 260 V548 Q1400 574 1382 592 L1264 710 H270 Q200 710 200 640 V352 Q200 326 218 308 L336 190 Z" fill="#171717"/>
+
+  <!-- Signal-orange handle breaks beyond the frame, giving the upper-right zone visible air. -->
+  <g transform="translate(1138 362) rotate(-45)">
+    <rect x="-16" y="-18" width="78" height="36" rx="18" fill="#D85B36"/>
+    <ellipse cx="62" cy="0" rx="20" ry="28" fill="#D85B36"/>
+    <path d="M62 -26 C108 -30 194 -33 240 -35 C262 -37 280 -23 286 0 C280 23 262 37 240 35 C194 33 108 30 62 26 Z" fill="#D85B36"/>
+    <rect x="55" y="-28" width="8" height="56" rx="4" fill="#171717"/>
+    <rect x="240" y="-35" width="8" height="70" rx="4" fill="#171717"/>
+  </g>
+
+  <!-- Cream I and F keep the press-like contrast. -->
+  <path d="M430 285 H478 V589 L452 615 H406 V311 Z" fill="#F5F0E8"/>
+  <path d="M606 285 H850 L828 357 H678 V414 H800 L778 486 H678 V615 H606 Z" fill="#F5F0E8"/>
+
+  <!-- The O is the signal: letter and inspection lens at once. -->
+  <circle cx="1050" cy="450" r="165" fill="#D85B36"/>
+  <circle cx="1050" cy="450" r="92" fill="#171717"/>
+
+  <!-- A 40-degree arc at a fixed 70px radius follows the circular glass surface. -->
+  <path d="M986.56 420.42 A70 70 0 0 1 1020.42 386.56" fill="none" stroke="#F5F0E8" stroke-width="12" stroke-linecap="round"/>
+</svg>
