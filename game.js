@@ -6,7 +6,7 @@ const CONFIG = {
   handle: "@israelfemiojo",
   lookbackDays: 14,                   // if today's file is missing, show the latest round from the last 14 days
   liveUrl: "",                        // optional: your live web address. Left empty, the game uses the address it is running on
-  goatcounter: ""                     // optional: your GoatCounter code (the part before .goatcounter.com) to count plays
+  goatcounter: "whichaisaidthat"                     // optional: your GoatCounter code (the part before .goatcounter.com) to count plays
 };
 
 const $ = (id) => document.getElementById(id);
