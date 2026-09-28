@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-28",
+  "theme": "Petty",
+  "questions": [
+    {
+      "prompt": "Write a text leaving the family group chat dramatically. Under 25 words.",
+      "model": "Grok",
+      "answer": "I entered this chat as family. I leave as a legend. Do not add me back. This is my final curtain."
+    },
+    {
+      "prompt": "Convince me to skip the gym today. Under 25 words.",
+      "model": "Claude",
+      "answer": "It's nearly midnight on Sunday. Your muscles grow during rest, not reps. Sleep now, then crush Monday's session fully charged."
+    },
+    {
+      "prompt": "Write a toxic motivational quote. Under 20 words.",
+      "model": "ChatGPT",
+      "answer": "Nobody is coming to save you. Stay stuck or become someone your excuses can’t recognize."
+    },
+    {
+      "prompt": "Reply to someone who owes you money but just posted vacation photos. Under 25 words.",
+      "model": "Gemini",
+      "answer": "Great photos! Glad you’re enjoying the trip. Since you clearly have the funds, when can I expect that money you owe me?"
+    },
+    {
+      "prompt": "Write a one star review of Monday. Under 30 words",
+      "model": "Gemini",
+      "answer": "★☆☆☆☆\nArrived completely uninvited just as the weekend was getting good. Brought loud alarms, endless emails, and terrible vibes. I’d like a refund. Skip if possible."
+    }
+  ]
+}
